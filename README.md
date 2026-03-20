@@ -30,12 +30,14 @@ pnpm run build
 ## What This Page Provides
 
 - Connect wallet button (Petra via wallet adapter)
-- 5 test buttons:
+- 7 test buttons:
   - Normal + SignAndSubmit
   - FeePayer + SignAndSubmit
   - Normal + SignThenSubmit
   - FeePayer + SignThenSubmit
-  - FeePayer + SignThenSubmit (SDK v4)
+  - FeePayer + SignThenSubmit (SDK v5)
+  - Build(v6)+FeePayer to Sign(v5)
+  - Build(v6)+FeePayer to Sign(v6)
 - Debug panel for last request/build summary
 - Result panel for status/hash/error details
 

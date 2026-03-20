@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "aptos-sdk-v4": "npm:@aptos-labs/ts-sdk@4.0.0",
+    "aptos-sdk-v5": "npm:@aptos-labs/ts-sdk@5.1.1",
     "@aptos-labs/ts-sdk": "6.2.0",
     "@aptos-labs/wallet-adapter-ant-design": "5.3.17",
     "@aptos-labs/wallet-adapter-react": "8.3.1",

@@ -20,9 +20,9 @@ importers:
       '@aptos-labs/wallet-standard':
         specifier: 1.0.0
         version: 1.0.0(@aptos-labs/ts-sdk@6.2.0(got@11.8.6))(@wallet-standard/core@1.1.1)
-      aptos-sdk-v4:
-        specifier: npm:@aptos-labs/ts-sdk@4.0.0
-        version: '@aptos-labs/ts-sdk@4.0.0(got@11.8.6)'
+      aptos-sdk-v5:
+        specifier: npm:@aptos-labs/ts-sdk@5.1.1
+        version: '@aptos-labs/ts-sdk@5.1.1(got@11.8.6)'
       react:
         specifier: 19.2.4
         version: 19.2.4
@@ -109,8 +109,8 @@ packages:
     peerDependencies:
       got: ^11.8.6
 
-  '@aptos-labs/ts-sdk@4.0.0':
-    resolution: {integrity: sha512-bRB9fT0t86btGyL/b5I4c3K1gZvldSvFv2KkV+1kEHt+yDbDrWI43wsfHLv0fFAVatCrH610NpLONMCnQSqQhA==}
+  '@aptos-labs/ts-sdk@5.1.1':
+    resolution: {integrity: sha512-2QhQzcbVa9o7uQTIfjAGFkWFgddg+R/Ftbo39ZPbNrs1L2b+oMhdB9/uZ0QStN25/h8HPCvH4h4aaPus2jabXQ==}
     engines: {node: '>=20.0.0'}
     deprecated: This version is deprecated, please upgrade to 5.2.1, or the latest version
 
@@ -1248,7 +1248,7 @@ snapshots:
     dependencies:
       got: 11.8.6
 
-  '@aptos-labs/ts-sdk@4.0.0(got@11.8.6)':
+  '@aptos-labs/ts-sdk@5.1.1(got@11.8.6)':
     dependencies:
       '@aptos-labs/aptos-cli': 1.1.1
       '@aptos-labs/aptos-client': 2.2.0(got@11.8.6)

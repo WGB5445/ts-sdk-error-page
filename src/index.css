@@ -10,10 +10,11 @@
 
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 .page {
-  max-width: 900px;
+  width: min(900px, 100%);
   margin: 0 auto;
   padding: 24px;
   display: grid;
@@ -21,6 +22,8 @@ body {
 }
 
 .card {
+  min-width: 0;
+  overflow: hidden;
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
@@ -28,10 +31,12 @@ body {
 }
 
 .send-btn {
-  height: 36px;
+  width: 100%;
+  min-height: 36px;
   border: 0;
   border-radius: 8px;
-  padding: 0 14px;
+  padding: 8px 14px;
+  line-height: 1.2;
   cursor: pointer;
   background: #0f766e;
   color: #fff;
@@ -39,8 +44,9 @@ body {
 
 .actions {
   margin-top: 12px;
+  min-width: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 10px;
 }
 
@@ -56,10 +62,15 @@ h2 {
 
 p {
   margin: 6px 0;
+  overflow-wrap: anywhere;
 }
 
 pre {
   margin: 8px 0 0;
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   background: #f1f5f9;
   border-radius: 8px;
   padding: 10px;
@@ -68,4 +79,19 @@ pre {
 
 .error {
   color: #b91c1c;
+}
+
+.log-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.log-item {
+  min-width: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fcfdff;
 }
