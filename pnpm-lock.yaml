@@ -20,6 +20,9 @@ importers:
       '@aptos-labs/wallet-standard':
         specifier: 1.0.0
         version: 1.0.0(@aptos-labs/ts-sdk@6.2.0(got@11.8.6))(@wallet-standard/core@1.1.1)
+      aptos-sdk-v4:
+        specifier: npm:@aptos-labs/ts-sdk@4.0.0
+        version: '@aptos-labs/ts-sdk@4.0.0(got@11.8.6)'
       react:
         specifier: 19.2.4
         version: 19.2.4
@@ -105,6 +108,11 @@ packages:
     engines: {node: '>=20.0.0'}
     peerDependencies:
       got: ^11.8.6
+
+  '@aptos-labs/ts-sdk@4.0.0':
+    resolution: {integrity: sha512-bRB9fT0t86btGyL/b5I4c3K1gZvldSvFv2KkV+1kEHt+yDbDrWI43wsfHLv0fFAVatCrH610NpLONMCnQSqQhA==}
+    engines: {node: '>=20.0.0'}
+    deprecated: This version is deprecated, please upgrade to 5.2.1, or the latest version
 
   '@aptos-labs/ts-sdk@6.2.0':
     resolution: {integrity: sha512-DXzftTnIONrerI1X2Gfc/OFwrUoMXIKjDuupBuU0F67W5wrq9xyM5qB6Q89Biub6A3M3Y4kS96x84VH5CN2anA==}
@@ -1239,6 +1247,22 @@ snapshots:
   '@aptos-labs/aptos-client@2.2.0(got@11.8.6)':
     dependencies:
       got: 11.8.6
+
+  '@aptos-labs/ts-sdk@4.0.0(got@11.8.6)':
+    dependencies:
+      '@aptos-labs/aptos-cli': 1.1.1
+      '@aptos-labs/aptos-client': 2.2.0(got@11.8.6)
+      '@noble/curves': 1.9.7
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      eventemitter3: 5.0.4
+      form-data: 4.0.5
+      js-base64: 3.7.8
+      jwt-decode: 4.0.0
+      poseidon-lite: 0.2.1
+    transitivePeerDependencies:
+      - got
 
   '@aptos-labs/ts-sdk@6.2.0(got@11.8.6)':
     dependencies:

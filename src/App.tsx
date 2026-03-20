@@ -7,10 +7,12 @@ import {
   SimpleTransaction,
   type AnyRawTransaction,
 } from "@aptos-labs/ts-sdk";
+import * as sdkV4 from "aptos-sdk-v4";
 import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
 const aptos = new Aptos(new AptosConfig({ network: Network.TESTNET }));
+const aptosV4 = new sdkV4.Aptos(new sdkV4.AptosConfig({ network: sdkV4.Network.TESTNET }));
 const RECIPIENT = "0x1";
 const AMOUNT_OCTA = 100;
 const EXPLORER_BASE = "https://explorer.aptoslabs.com/txn";
@@ -19,7 +21,8 @@ type TxResult = {
   status: "idle" | "submitting" | "success" | "error";
   buildMode?: "payload" | "builtRawTx";
   mode?: "normal" | "withFeePayer";
-  method?: "signAndSubmit" | "signThenSubmit";
+  method?: "signAndSubmit" | "signThenSubmit" | "signThenSubmitV4";
+  sdk?: "v6.2.0" | "v4.0.0";
   hash?: string;
   explorerUrl?: string;
   errorText?: string;
@@ -33,6 +36,7 @@ type BuildSummary = {
   withFeePayer: boolean;
   txType?: string;
   serializedBytes?: number;
+  sdk?: "v6.2.0" | "v4.0.0";
 };
 
 function shortAddress(value?: string | null): string {
@@ -103,21 +107,45 @@ export default function App() {
     });
   };
 
+  const buildTransferTxV4 = async ({
+    sender,
+    recipient,
+    amount,
+    withFeePayer,
+  }: {
+    sender: string;
+    recipient: string;
+    amount: number;
+    withFeePayer: boolean;
+  }) => {
+    return aptosV4.transaction.build.simple({
+      sender,
+      data: {
+        function: "0x1::aptos_account::transfer_coins",
+        typeArguments: ["0x1::aptos_coin::AptosCoin"],
+        functionArguments: [recipient, amount],
+      },
+      withFeePayer,
+    });
+  };
+
   const runTx = async ({
     withFeePayer,
     method,
   }: {
     withFeePayer: boolean;
-    method: "signAndSubmit" | "signThenSubmit";
+    method: "signAndSubmit" | "signThenSubmit" | "signThenSubmitV4";
   }) => {
     const mode = withFeePayer ? "withFeePayer" : "normal";
     const buildMode = method === "signAndSubmit" ? "payload" : "builtRawTx";
+    const sdk = method === "signThenSubmitV4" ? "v4.0.0" : "v6.2.0";
     if (!connected || !accountAddress) {
       setTxResult({
         status: "error",
         buildMode,
         mode,
         method,
+        sdk,
         errorText: "Wallet not connected. Please connect Petra first.",
         errorRaw: null,
       });
@@ -130,6 +158,7 @@ export default function App() {
         buildMode,
         mode,
         method,
+        sdk,
         errorText: `Network mismatch: wallet=${networkName}. Please switch to testnet in Petra.`,
         errorRaw: network,
       });
@@ -141,8 +170,9 @@ export default function App() {
       recipient: RECIPIENT,
       amount: AMOUNT_OCTA,
       withFeePayer,
+      sdk,
     });
-    setTxResult({ status: "submitting", buildMode, mode, method });
+    setTxResult({ status: "submitting", buildMode, mode, method, sdk });
 
     try {
       const transactionInput: Parameters<typeof signAndSubmitTransaction>[0] = {
@@ -160,12 +190,20 @@ export default function App() {
         const response = await signAndSubmitTransaction(transactionInput);
         hash = response.hash;
       } else {
-        const builtTx = await buildTransferTx({
-          sender: accountAddress,
-          recipient: RECIPIENT,
-          amount: AMOUNT_OCTA,
-          withFeePayer,
-        });
+        const builtTx =
+          method === "signThenSubmitV4"
+            ? await buildTransferTxV4({
+                sender: accountAddress,
+                recipient: RECIPIENT,
+                amount: AMOUNT_OCTA,
+                withFeePayer,
+              })
+            : await buildTransferTx({
+                sender: accountAddress,
+                recipient: RECIPIENT,
+                amount: AMOUNT_OCTA,
+                withFeePayer,
+              });
         const signed = await signTransaction({
           transactionOrPayload:
             builtTx as unknown as Parameters<typeof signTransaction>[0]["transactionOrPayload"],
@@ -189,6 +227,7 @@ export default function App() {
           withFeePayer,
           txType: builtTx.constructor.name,
           serializedBytes: rawBytes,
+          sdk,
         });
       }
 
@@ -199,6 +238,7 @@ export default function App() {
         buildMode,
         mode,
         method,
+        sdk,
         hash,
         explorerUrl: `${EXPLORER_BASE}/${hash}?network=testnet`,
       });
@@ -215,6 +255,7 @@ export default function App() {
             withFeePayer,
             method,
             buildMode,
+            sdk,
             walletName: wallet?.name ?? null,
             network: networkName,
             sender: accountAddress,
@@ -262,6 +303,13 @@ export default function App() {
           >
             FeePayer + SignThenSubmit
           </button>
+          <button
+            className="send-btn"
+            onClick={() => runTx({ withFeePayer: true, method: "signThenSubmitV4" })}
+            disabled={txResult.status === "submitting"}
+          >
+            FeePayer + SignThenSubmit (SDK v4)
+          </button>
         </div>
       </section>
 
@@ -292,6 +340,9 @@ export default function App() {
         </p>
         <p>
           <strong>Method:</strong> {txResult.method ?? "-"}
+        </p>
+        <p>
+          <strong>SDK:</strong> {txResult.sdk ?? "-"}
         </p>
 
         {txResult.hash && (
